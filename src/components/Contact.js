@@ -19,8 +19,24 @@ const Contact =()=>{
         })
     }
 
-    const handleSubmit=()=>{
-
+    const handleSubmit= async(e)=>{
+        e.preventDefault();
+        setButtonText('Sending...');
+        let response = await fetch('http://localhost:8080/contact',{
+            method:'POST',
+            headers:{
+              "Content-Type":"Application/json; charset=utf-8"  ,
+            },
+            body: JSON.stringify(formDetails),
+        })
+        setButtonText('Send');
+        let result=response.json();
+        setFormDetails(formInitiaDetails)
+        if(result.code===200){
+            setStatus({success:true, message:"Message sent successfully"});
+        }else{
+            setStatus({success:false, message: "Something went wrong, please try again"})
+        }
     }
     return (
         <section className="contact" id="contact">
